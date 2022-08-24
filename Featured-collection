@@ -1,0 +1,190 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css" integrity="sha512-6lLUdeQ5uheMFbWm3CP271l14RsX1xtx+J5x2yeIDkkiBpeVTNhTqijME7GgRKKi6hCqovwCoBTlRBEC20M8Mg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" integrity="sha512-wR4oNhLBHf7smjy0K4oqzdWumd+r5/+6QO/vDda76MW5iug4PT7v86FoEkySIJft3XA0Ae6axhIvHrqwm793Nw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<div class="featured-collection">
+  <div class="page-wrapper">
+  <div class="section-header">
+    <h3 class="collections-title">{{ collections[section.settings.handle].title }}</h3>
+  </div>
+  <div class="row">
+    <div class="collection-products">
+       <div class="collection-products-slider">
+      {% for product in collections[section.settings.handle].products limit:5 %} 
+      {% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
+
+        <div class="product-image">
+          <a href="{{ product.url }}">
+        <img src="{{ featured_image | product_img_url: 'master' }}">
+          </a>
+        </div>
+      {% endfor %}
+       </div>
+    </div>
+     <div class="collection-details">
+          <div class="collection-det">
+         {% for product in collections[section.settings.handle].products limit:5 %} 
+        <div class="group-title">
+          <div class="details-part">
+          <span class="item-title">
+               <a href="{{ product.url }}">
+          {{ product.title }}
+               </a>
+          </span>
+           <span class="product-money">
+          {{ product.price | money }}
+          </span>
+              <a class="btn-style" href="{{ product.url }}">Shop Now</a>
+          </div>
+        </div>
+      {% endfor %}
+          </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Featured Products",
+    "settings": [
+      {
+        "type": "collection",
+        "id": "handle",
+        "label": "Item Name"
+      }
+	 
+    ],
+    "presets": [
+      {
+        "name": "Featured Products",
+        "category": "Featured Products"
+      }
+    ]
+  }
+{% endschema %}
+<style>
+  .featured-collection .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+}
+  .page-wrapper{
+     max-width: 1200px;
+    margin: 0 auto;
+  }
+   
+.collection-products,.collection-details {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.collection-products img {
+    max-width: 500px;
+    margin-left: auto;
+}
+
+span.item-title a {
+    line-height: normal;
+    font-size: 20px;
+    text-decoration: none;
+    color: #000;
+    display: block;
+    padding-bottom: 20px;
+}
+.details-part {
+    padding: 50px;
+}
+.product-money{
+   padding: 20px 0;
+  display:block;
+}
+.btn-style {
+    width: 200px;
+    text-decoration: none;
+    display: block;
+    border-radius: 20px;
+    background: #e96f85;
+    text-align: center;
+    padding: 6px;
+    margin: 0 auto;
+    color: #fff;
+}
+
+.slick-dots li button:before {
+    font-size: 20px;
+}
+  .slick-next.slick-arrow {
+    background: url(//cdn.shopify.com/s/files/1/0017/5194/1197/files/right_arrow.png?v=1366234…) no-repeat center;
+    text-indent: -1e22px;
+    background-size: 18px;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    background-position: center;
+    position: absolute;
+    right: 0;
+    top: 50%;
+}
+.slick-prev.slick-arrow {
+    z-index: 9;
+    background: url(//cdn.shopify.com/s/files/1/0017/5194/1197/files/left-arrow.png?v=2933726859586755675) no-repeat center;
+    text-indent: -1e22px;
+    background-size: 18px;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+}
+
+.details-part {
+    max-width: 400px;
+    margin: 0 auto;
+    background: pink;
+    padding: 10px;
+    text-align: center;
+}
+  .collections-title {
+    font-size: 40px;
+    font-weight: bold;
+    text-align: left;
+    text-transform: uppercase;
+}
+  @media screen and (max-width:767px){
+    .featured-collection .row {
+    flex-direction: column;
+}
+
+.collection-products, .collection-details {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 20px;
+}
+
+.collection-products img {
+    max-width: 100%;
+}
+  }
+</style>
+<script type="text/javascript">
+   $('.collection-products-slider').slick({
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: false,
+  fade: true,
+     autoplay: true,
+    autoplaySpeed: 1000,
+  asNavFor: '.collection-det'
+});
+$('.collection-det').slick({
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  asNavFor: '.collection-products-slider',
+  dots: true,
+  centerMode: false,
+  focusOnSelect: true
+});
+</script>
